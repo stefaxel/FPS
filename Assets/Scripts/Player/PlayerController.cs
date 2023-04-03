@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask whatIsGround;
     private bool isGrounded;
 
+    private bool isShooting;
+
     private void Awake()
     {
         playerInput = new PlayerInput1();
@@ -47,19 +49,29 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        move = context.ReadValue<Vector2>();
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        Jump(context);
+    }
+
     private void PlayerMovement()
     {
-        move = playerInput.Player.Move.ReadValue<Vector2>();
+        //move = context.ReadValue<Vector2>();
 
         Vector3 movement = (move.y * transform.forward) + (move.x * transform.right);
         controller.Move(movement * moveSpeed * Time.deltaTime);
     }
 
-    private void Jump()
+    private void Jump(InputAction.CallbackContext context)
     {
         isGrounded = Physics.CheckSphere(ground.position, distanceToGround, whatIsGround);
 
-        if (playerInput.Player.Jump.triggered && isGrounded)
+        if (context.performed && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
@@ -70,6 +82,5 @@ public class PlayerController : MonoBehaviour
     {
         Gravity();
         PlayerMovement();
-        Jump();
     }
 }

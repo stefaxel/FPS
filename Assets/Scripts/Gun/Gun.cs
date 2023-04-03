@@ -3,42 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using StarterAssets;
 using UnityEngine.InputSystem;
+using System;
 
 public class Gun : MonoBehaviour
 {
-    //PlayerInput playerInput;
+    private PlayerInput1 playerInput;
 
-    StarterAssetsInputs playerInput;
-    // Start is called before the first frame update
-    void Start()
+    public GameObject firePoint;
+    public GameObject bulletPrefab;
+
+    private bool isShooting;
+
+    private void Awake()
     {
-        playerInput = transform.root.GetComponent<StarterAssetsInputs>();
-        //input = transform.root.GetComponent<StarterAssetsInputs>();
+        playerInput = new PlayerInput1();
+
+        playerInput.Player.Fire.started += ctx => StartShot();
+        playerInput.Player.Fire.canceled += ctx => EndShot();
     }
 
-    public void OnFire(InputAction.CallbackContext context)
+    private void Update()
     {
-        if(context.performed)
+        if (isShooting)
         {
-            Shoot();
+            OnShoot();
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void StartShot()
     {
-        //if (input.canShoot)
-        //{
-        //    Shoot();
-        //    input.canShoot = false;
-        //}
+        isShooting = true;
     }
 
-    
-
-    void Shoot()
+    private void EndShot()
     {
-        Debug.Log("Gun is firing");
+        isShooting = false;
     }
-    
+
+    private void OnEnable()
+    {
+        playerInput.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.Disable();
+    }
+
+    private void OnShoot()
+    {
+        Debug.Log("fire gun");
+        //GameObject bullet = Instantiate(bulletPrefab, firePoint.transform.position, transform.rotation);
+        //bullet.GetComponent<Rigidbody>().AddForce(transform.forward * 600f);
+        //Destroy(bullet, 1f);
+    }
+
 }
