@@ -130,7 +130,7 @@ public class Gun : MonoBehaviour
         bullet.transform.forward = directionWithSpread.normalized;
         bullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         bullet.GetComponent<Rigidbody>().AddForce(fpsCamera.transform.up * upwardForce, ForceMode.Impulse);
-        Destroy(bullet, 1f);
+        //Destroy(bullet, 1f);
 
         bulletsLeft--;
         bulletsShot++;

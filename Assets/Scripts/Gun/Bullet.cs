@@ -75,8 +75,8 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Bullet"))
-            return;
+        if (collision.collider.CompareTag("Enviroment"))
+            Destroy(gameObject);
 
         collisions++;
 
